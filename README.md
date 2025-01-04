@@ -4,25 +4,30 @@ L'application Gestion de la Surveillance des Examens est conçue pour organiser 
 
 ## Table des matières
 
-1. [Architecture du projet](#architecture-du-projet)  
-2. [Frontend](#frontend)  
+1. [Architecture du projet](#architecture-du-projet)
+2. [Diagramme de classe](#diagramme-de-calsse)
+3. [Frontend](#frontend)  
    1. [Technologies utilisées](#technologies-utilisées)  
-3. [Backend](#backend)  
+4. [Backend](#backend)  
    1. [Structure du backend](#structure)
-4. [Commencer](#commencer)
+5. [Commencer](#commencer)
    1. [Prérequis](#prérequis)  
    2. [Configuration du Backend](#configuration-du-backend)  
    3. [Configuration du Frontend](#configuration-du-frontend)  
    4. [Tester l'application](#tester-lapplication)  
-5. [Vidéo Démonstrative](#vidéo-démonstrative)  
-6. [Contributrice](#contributrice)  
+6. [Vidéo Démonstrative](#vidéo-démonstrative)  
+7. [Contributrice](#contributrice)  
 
 
 # Architecture du projet
 ![archi](https://github.com/user-attachments/assets/b4013e4f-e5c7-448a-bc5b-98e9d2623083)
 
-
 L'application suit une architecture client-serveur, avec un serveur backend implémenté à l'aide du framework Spring Boot et un client web développé avec ReactJS. Le système permet une communication sécurisée et efficace entre les utilisateurs et le serveur grâce aux APIs REST.
+
+---
+# Diagramme de classe
+![Classe UML Surveillance](https://github.com/user-attachments/assets/768504a7-35e8-4c20-9e17-517b896c3a32)
+
 
 ---
 # Frontend:
