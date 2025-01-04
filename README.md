@@ -26,8 +26,8 @@ L'application suit une architecture client-serveur, avec un serveur backend impl
 
 ---
 # Frontend:
--Authentification sécurisée : Connexion avec gestion des rôles via JWT.
--Interface intuitive : Navigation fluide avec des pages dédiées à la gestion des départements, des enseignants, des locaux, des options, des modules et des examens.
+- Authentification sécurisée : Connexion avec gestion des rôles via JWT.
+- Interface intuitive : Navigation fluide avec des pages dédiées à la gestion des sessions, des départements, des enseignants, des locaux, des options, des modules et des examens.
 
 ### 1.Technologies utilisés:
 -React.js : Bibliothéque JavaScript pour construire des interfaces utilisateur réactives.
