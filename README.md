@@ -2,21 +2,21 @@
 
 L'application Gestion de la Surveillance des Examens est conçue pour organiser et répartir de manière équitable les surveillances des examens au sein des départements universitaires. Elle permet de gérer les enseignants, les locaux, ainsi que les plannings de surveillance en respectant des contraintes spécifiques (nombre de surveillants par salle, réservistes, etc.).
 
-## Table of Contents
+## Table des matières
 
-1. [Architecture du projet](#Architecture-du-projet)  
+1. [Architecture du projet](#architecture-du-projet)  
 2. [Frontend](#frontend)  
-   - [Technologies utilisés](#1technologies-utilisés)  
-5. [Backend](#backend)  
-   - [Technologies utilisés](#1structure)  
-   - [Code Structure](#code-structure)  
-6. [Getting Started](#getting-started)  
-   - [Prerequisites](#prerequisites)  
-   - [Backend Setup](#backend-setup)  
-   - [Frontend Setup](#frontend-setup)  
-   - [Testing the Application](#testing-the-application)  
-7. [Video Demonstration](#video-demonstration)  
-8. [Contributors](#contributors)
+   1. [Technologies utilisées](#technologies-utilisées)  
+3. [Backend](#backend)  
+   1. [Structure du backend](#structure)
+4. [Commencer](#commencer)
+   1. [Prérequis](#prérequis)  
+   2. [Configuration du Backend](#configuration-du-backend)  
+   3. [Configuration du Frontend](#configuration-du-frontend)  
+   4. [Tester l'application](#tester-lapplication)  
+5. [Vidéo Démonstrative](#vidéo-démonstrative)  
+6. [Contributrice](#contributrice)  
+
 
 # Architecture du projet
 ![archi](https://github.com/user-attachments/assets/b4013e4f-e5c7-448a-bc5b-98e9d2623083)
@@ -50,7 +50,7 @@ Backend
   - Regroupe les interfaces des repositories Spring Data JPA pour effectuer les opérations CRUD.
 
 ---
-## Getting Started
+## Commencer
 
 Suivez ces étapes pour configurer et exécuter le projet **Gestion de la Surveillance des Examens** en local :
 
@@ -103,11 +103,11 @@ Suivez ces étapes pour configurer et exécuter le projet **Gestion de la Survei
 
 Votre application full-stack **GestionSurveillance** est maintenant opérationnelle en local. Si vous rencontrez des problèmes, consultez les journaux de la console pour identifier les messages d'erreur et vérifiez que toutes les dépendances sont correctement installées.
 
-## Video Demonstration
+## Vidéo Démonstrative
 
 ---
 
-## Contributors
+## Contributrice
 - DRIHAM Siham [Github](https://github.com/SihamDriham)
 - ZENNOURI Nassima [Github](https://github.com/NassimaZENNOURI)
 - SABROU Hafsa [Github](https://github.com/)
