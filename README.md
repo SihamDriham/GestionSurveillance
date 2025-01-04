@@ -110,6 +110,6 @@ Votre application full-stack **GestionSurveillance** est maintenant opérationne
 ## Contributrice
 - DRIHAM Siham [Github](https://github.com/SihamDriham)
 - ZENNOURI Nassima [Github](https://github.com/NassimaZENNOURI)
-- SABROU Hafsa [Github](https://github.com/)
-- ZAHIR Oumaima [Github](https://github.com/)
+- SABROU Hafsa [Github](https://github.com/Hafsa1sa)
+- ZAHIR Oumaima [Github](https://github.com/ZahirOuma)
 
