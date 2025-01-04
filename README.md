@@ -30,13 +30,13 @@ L'application suit une architecture client-serveur, avec un serveur backend impl
 - Interface intuitive : Navigation fluide avec des pages dédiées à la gestion des sessions, des départements, des enseignants, des locaux, des options, des modules et des examens.
 
 ### 1.Technologies utilisés:
--React.js : Bibliothéque JavaScript pour construire des interfaces utilisateur réactives.
--Axios : Gestion des requêtes HTTP vers le backend.
+- React.js : Bibliothéque JavaScript pour construire des interfaces utilisateur réactives.
+- Axios : Gestion des requêtes HTTP vers le backend.
 
 # Backend:
--Spring Boot : Framework Java pour développer rapidement des API robustes.
--Spring Security : Module pour l'authentification et l'autorisation.
--JWT (JSON Web Tokens) : Gestion sécurisée des sessions utilisateur.
+- Spring Boot : Framework Java pour développer rapidement des API robustes.
+- Spring Security : Module pour l'authentification et l'autorisation.
+- JWT (JSON Web Tokens) : Gestion sécurisée des sessions utilisateur.
 
 ### 1.Structure:
 Backend
@@ -75,6 +75,20 @@ Suivez ces étapes pour configurer et exécuter le projet **Gestion de la Survei
 
 ### **Configuration du Frontend :**
 
+1. **Cloner le projet :**
+   - Ouvrez un terminal et exécutez les commandes suivantes :
+   ```bash
+   git clone <url_du_dépôt_frontend>
+   cd <dossier_du_projet_frontend>
+
+   ```
+2. **Installer les dépendances :**
+   - Ouvrez un terminal et exécutez le commande suivante :
+   ```bash
+   npm install
+   ```
+
+2. **Lancer le frontend :**
  - Ouvrez un terminal et exécutez le commande suivante :
    ```bash
    npm start
@@ -83,9 +97,9 @@ Suivez ces étapes pour configurer et exécuter le projet **Gestion de la Survei
 
 ### **Tester l'Application :**
 - Une fois le backend et le frontend en cours d'exécution :
-  -Accédez à l'interface utilisateur via http://localhost:4000.
-  -Connectez-vous.
-  -Ajoutez des départements, enseignants, locaux, sessions, examens, options et modules.
+  - Accédez à l'interface utilisateur via http://localhost:4000.
+  - Connectez-vous.
+  - Ajoutez des départements, enseignants, locaux, sessions, examens, options et modules.
 
 Votre application full-stack **GestionSurveillance** est maintenant opérationnelle en local. Si vous rencontrez des problèmes, consultez les journaux de la console pour identifier les messages d'erreur et vérifiez que toutes les dépendances sont correctement installées.
 
