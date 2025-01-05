@@ -109,7 +109,9 @@ Suivez ces étapes pour configurer et exécuter le projet **Gestion de la Survei
 Votre application full-stack **GestionSurveillance** est maintenant opérationnelle en local. Si vous rencontrez des problèmes, consultez les journaux de la console pour identifier les messages d'erreur et vérifiez que toutes les dépendances sont correctement installées.
 
 ## Vidéo Démonstrative
-https://github.com/user-attachments/assets/78f6b9eb-33d7-4dda-80b2-54fcf4796d23
+___
+https://github.com/user-attachments/assets/13042deb-a763-4059-9064-e77139b3a98e
+
 ---
 
 ## Contributrice
