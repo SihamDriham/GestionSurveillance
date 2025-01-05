@@ -151,7 +151,7 @@ const DashDefault = () => {
               <FaBuilding size={40} color="#ffc107" />
               <h5 style={{ marginTop: '10px', color: '#333' }}>Départements</h5>
               <h2 style={{ fontWeight: 'bold', color: '#ffc107' }}>{departmentsCount}</h2>
-              <p style={{ color: '#6c757d' }}>+19% par rapport au mois dernier</p>
+              <p style={{ color: '#6c757d' }}>Nombre de département</p>
             </Card.Body>
           </Card>
         </Col>

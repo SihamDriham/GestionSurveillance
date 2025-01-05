@@ -13,6 +13,41 @@ public class OptionServiceImp implements OptionService {
     @Autowired
     private OptionRepository optionRepository;
 
+   /* @Autowired
+    private DepartementRepository departementRepository;
+
+    @Override
+
+    public List<Map<String, Object>> getAllOptionWithDetails() {
+        List<Object[]> results = optionRepository.findAllOptionByDept();
+        List<Map<String, Object>> options = new ArrayList<>();
+
+        for (Object[] row : results) {
+            Map<String, Object> optionData = new HashMap<>();
+            optionData.put("nomOption", row[0]);
+            optionData.put("nomdept", row[1]);
+            optionData.put("idOption", row[2]);
+
+            options.add(optionData);
+        }
+
+        return options;
+    }
+
+
+    @Override
+
+    public void ajouterOption(Map<String, Object> requestBody, Long idDept) {
+        Option option = new Option();
+
+        Departement dept = departementRepository.findById(idDept)
+                .orElseThrow(() -> new RuntimeException("Type avec id " + idDept + " non trouvé"));
+        option.setDepartement(dept);
+
+        optionRepository.save(option);
+    }
+*/
+
     @Override
     public List<Option> getAllOption() {
         return optionRepository.findAll();

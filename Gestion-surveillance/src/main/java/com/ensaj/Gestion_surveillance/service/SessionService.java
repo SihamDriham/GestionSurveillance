@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface SessionService {
 
+    //List<Session> getAllSessions();
     List<Map<String, Object>> getAllSessionssWithDetails();
 
     Optional<Session> getSessionById(Long idSession);

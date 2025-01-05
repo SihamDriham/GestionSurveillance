@@ -28,11 +28,13 @@ public class EnseignantServiceImp implements EnseignantService{
         return enseignantRepository.save(enseignant);
     }
 
+    // Trouver un enseignant par son ID
     @Override
     public Optional<Enseignant> findEnseignantById(Long id) {
         return enseignantRepository.findById(id);
     }
 
+    // Supprimer un enseignant
     @Override
     public void deleteEnseignant(Long id) {
         enseignantRepository.deleteById(id);

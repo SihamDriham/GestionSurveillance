@@ -4,14 +4,16 @@ import java.sql.Time;
 import java.util.Date;
 
 public class SurveillanceDTO {
-    private Date date;
-    private Time heureDebut;
-    private Time heureFin;
-    private String locauxNom;
-    private String surveillantNom;
-    private String reservisteNom;
-    private String examenNom;
-    
+	private Date date;
+	private Time heureDebut;
+	private Time heureFin;
+	private String locauxNom;
+	private String surveillantNom;
+	private String surveillantPrenom;
+	private String reservisteNom;
+	private String reservistePrenom;
+	private String examenNom;
+
 	public Date getDate() {
 		return date;
 	}
@@ -54,5 +56,21 @@ public class SurveillanceDTO {
 	public void setExamenNom(String examenNom) {
 		this.examenNom = examenNom;
 	}
-  
+
+
+	public String getSurveillantPrenom() {
+		return surveillantPrenom;
+	}
+
+	public void setSurveillantPrenom(String surveillantPrenom) {
+		this.surveillantPrenom = surveillantPrenom;
+	}
+
+	public String getReservistePrenom() {
+		return reservistePrenom;
+	}
+
+	public void setReservistePrenom(String reservistePrenom) {
+		this.reservistePrenom = reservistePrenom;
+	}
 }

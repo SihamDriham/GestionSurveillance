@@ -23,6 +23,7 @@ public class LocauxRestController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<Locaux>> getAllLocaux() {
         List<Locaux> locaux = locauxService.getAllLocaux();
+        // Trier les locaux par l'attribut taille du plus grand au plus petit
         locaux.sort(Comparator.comparing(Locaux::getTaille).reversed());
         return ResponseEntity.ok(locaux);
     }

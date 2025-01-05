@@ -14,8 +14,10 @@ public interface EnseignantService {
 
     Enseignant saveEnseignant(Enseignant enseignant);
 
+    // Trouver un enseignant par son ID
     Optional<Enseignant> findEnseignantById(Long id);
 
+    // Supprimer un enseignant
     void deleteEnseignant(Long id);
 
     List<Enseignant> searchEnseignants(String search);

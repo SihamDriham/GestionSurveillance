@@ -33,4 +33,7 @@ public class TypeSession {
     @Column(name = "nomType")
     private String nomType;
 
+   /* @OneToMany(mappedBy = "typeSession", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Session> sessions;*/
+
 }

@@ -25,7 +25,7 @@ public class ExamenServiceImp implements ExamenService{
 
     @Autowired
     private ModuleRepository moduleRepository;
-    
+
 
     @Autowired
     private LocauxRepository locauxRepository;
@@ -99,6 +99,7 @@ public class ExamenServiceImp implements ExamenService{
 
         examen.setDate(date);
 
+        // Format de l'heure pour les champs heureDebut et heureFin
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         try {
@@ -122,13 +123,15 @@ public class ExamenServiceImp implements ExamenService{
         Enseignant enseignant = enseignantRepository.findById(idEnseignant)
                 .orElseThrow(() -> new RuntimeException("Type avec id " + idEnseignant + " non trouvé"));
         examen.setEnseignant(enseignant);
-        
-        List<Number> idLocauxRaw = (List<Number>) requestBody.get("idLocaux"); 
+
+     // Récupération des locaux sélectionnés
+        List<Number> idLocauxRaw = (List<Number>) requestBody.get("idLocaux"); // Récupérer la liste des Number
         List<Long> idLocaux = new ArrayList<>();
 
+        // Convertir les éléments de Number en Long
         if (idLocauxRaw != null) {
             for (Number idLocauxItem : idLocauxRaw) {
-                idLocaux.add(idLocauxItem.longValue()); 
+                idLocaux.add(idLocauxItem.longValue()); // Convertir chaque Number en Long
             }
         }
 
@@ -144,6 +147,7 @@ public class ExamenServiceImp implements ExamenService{
         examen.setLocaux(locauxList);
 
 
+        // Sauvegarder la session dans la base de données
         examenRepository.save(examen);
     }
 
@@ -161,10 +165,16 @@ public class ExamenServiceImp implements ExamenService{
     public List<Examen> getExamensByIdSessionDateHeureDebutHeureFin(Long idSession, Date date, Time heureDebut, Time heureFin) {
         return examenRepository.findExamensByIdSessionDateHeureDebutHeureFin(idSession, date, heureDebut, heureFin);
     }
-    
-    @Override
-    public long countExamsBySessionId(Long idSession) {
-        return examenRepository.countBySessionId(idSession);
+
+    public List<Locaux> getLocauxByExamenId(long idExamen) {
+        Optional<Examen> examenOpt = examenRepository.findById(idExamen);
+        System.out.println("Examen3 ");
+        if (examenOpt.isPresent()) {
+            System.out.println("Examen ");
+            return examenOpt.get().getLocaux();
+        } else {
+            throw new RuntimeException("Examen non trouvé avec l'ID : " + idExamen);
+        }
     }
 
 }

@@ -30,15 +30,17 @@ public class ExcelService {
 
     public void importDataFromExcel(MultipartFile file) throws IOException {
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
-            Sheet sheet = workbook.getSheetAt(0); 
+            Sheet sheet = workbook.getSheetAt(0); // On prend la première feuille du fichier Excel
 
             for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue; 
+                if (row.getRowNum() == 0) continue; // On saute la ligne d'en-tête
 
+                // Lecture des données depuis chaque colonne
                 String nomDepartement = row.getCell(0).getStringCellValue().trim();
                 String nomEnseignant = row.getCell(1).getStringCellValue().trim();
                 String prenomEnseignant = row.getCell(2).getStringCellValue().trim();
                 String emailEnseignant = row.getCell(3).getStringCellValue().trim();
+//                Boolean disponse = row.getCell(4).getBooleanCellValue();
                 String disponse = row.getCell(4).getStringCellValue().trim();
                 String nomLocaux = row.getCell(5).getStringCellValue().trim();
                 String typeLocaux = row.getCell(6).getStringCellValue().trim();
@@ -46,6 +48,7 @@ public class ExcelService {
                 String nomOption = row.getCell(8).getStringCellValue().trim();
                 String nomModule = row.getCell(9).getStringCellValue().trim();
 
+                // Vérifier et insérer le département
                 Departement departement = departementRepository.findByNomDept(nomDepartement);
                 if (departement == null) {
                     departement = new Departement();
@@ -53,6 +56,7 @@ public class ExcelService {
                     departementRepository.save(departement);
                 }
 
+                // Vérifier et insérer l'enseignant
                 Enseignant enseignant = enseignantRepository.findByEmail(emailEnseignant);
                 System.out.println("Le nom de l'enseignant : " + nomEnseignant);
                 if (enseignant == null) {
@@ -64,10 +68,11 @@ public class ExcelService {
                         enseignant.setDisponse(false);
                     }
                     enseignant.setDisponse(true);
-                    enseignant.setDepartement(departement); 
+                    enseignant.setDepartement(departement); // Lien avec le département
                     enseignantRepository.save(enseignant);
                 }
 
+                // Vérifier et insérer le local
                 Locaux locaux = locauxRepository.findByNomLocaux(nomLocaux);
                 if (locaux == null) {
                     locaux = new Locaux();
@@ -77,6 +82,7 @@ public class ExcelService {
                     locauxRepository.save(locaux);
                 }
 
+                // Vérifier et insérer l'option (si elle existe dans le domaine métier)
                 Option option = optionRepository.findByNomOption(nomOption); // Exemple de méthode pour trouver une option
                 if (option == null) {
                     option = new Option();
@@ -84,6 +90,7 @@ public class ExcelService {
                     optionRepository.save(option);
                 }
 
+                // Vérifier et insérer le module
                 Module module = moduleRepository.findByNomModule(nomModule);
                 if (module == null) {
                     module = new Module();
@@ -102,10 +109,10 @@ public class ExcelService {
             try {
                 return Integer.parseInt(cell.getStringCellValue().trim());
             } catch (NumberFormatException e) {
-                return 0; 
+                return 0; // ou une valeur par défaut si le format n'est pas valide
             }
         }
-        return 0;
+        return 0; // Valeur par défaut si la cellule est vide ou mal formatée
     }
 }
 

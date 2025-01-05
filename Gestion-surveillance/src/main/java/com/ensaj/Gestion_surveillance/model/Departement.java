@@ -45,4 +45,8 @@ public class Departement {
 		this.enseignants = enseignants;
 	}
 
+   /* @OneToMany(mappedBy = "departement", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Option> options;
+*/
+
 }
