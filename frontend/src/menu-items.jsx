@@ -125,7 +125,7 @@ const menuItems = {
           title: 'Surveillance',
           type: 'item',
           icon: 'feather icon-clipboard',
-          url: '/tables/surveillance'
+          url: '/surveillance/:idSession'
         },
         {
           id: 'maps',

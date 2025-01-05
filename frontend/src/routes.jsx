@@ -231,6 +231,11 @@ const routes = [
       },
       {
         exact: 'true',
+        path: '/surveillance/:idSession',
+        element: lazy(() => import('./views/tables/SurveillanceTable'))
+      },
+      {
+        exact: 'true',
         path: '/basic/typography',
         element: lazy(() => import('./views/ui-elements/basic/BasicTypography'))
       },

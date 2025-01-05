@@ -18,7 +18,4 @@ public interface ExamenService {
     List<Map<String, Object>> getExamenWithDetails(Long idSession, Date date, Time heureDebut, Time heureFin);
 
     List<Examen> getExamensByIdSessionDateHeureDebutHeureFin(Long idSession, Date date, Time heureDebut, Time HeureFin);
-
-    public long countExamsBySessionId(Long idSession);
-
 }

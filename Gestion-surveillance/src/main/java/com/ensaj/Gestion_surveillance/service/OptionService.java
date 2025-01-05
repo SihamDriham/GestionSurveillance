@@ -7,6 +7,10 @@ import java.util.Optional;
 
 public interface OptionService {
 
+    /*List<Map<String, Object>> getAllOptionWithDetails();
+
+    void ajouterOption(Map<String, Object> requestBody, Long idDept);*/
+
     List<Option> getAllOption();
 
     Optional<Option> getOptionById(long idOption);

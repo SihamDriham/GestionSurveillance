@@ -1,109 +1,42 @@
 package com.ensaj.Gestion_surveillance.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.*;
-
 import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 @Data
 @Entity
-@IdClass(SurveillanceId.class)
-@Table(name = "Surveillance",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"date", "heureDebut", "heureFin", "idSurvei", "idReserviste"}),
-                @UniqueConstraint(columnNames = {"idExamen", "idSurvei", "idReserviste"}),
-                @UniqueConstraint(columnNames = {"date", "heureDebut", "heureFin", "idExamen"})
-        }
-)
-
-public class Surveillance{
+@Table(name = "surveillance")
+public class Surveillance {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private Date date;
-    @Id
+
+    @Column(nullable = false)
     private Time heureDebut;
-    @Id
+
+
+    @Column(nullable = false)
     private Time heureFin;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idLocaux", nullable = false, foreignKey = @ForeignKey(name = "fk1"))
-    private Locaux locaux;
+    @Column(name = "idLocaux", nullable = false)
+    private Long idLocaux;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idSurvei", nullable = false, foreignKey = @ForeignKey(name = "fk2"))
-    private Enseignant surveillant;
+    @Column(name = "idSurveillant", nullable = false)
+    private Long idSurveillant;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idReserviste", nullable = false, foreignKey = @ForeignKey(name = "fk3"))
-    private Enseignant reserviste;
+    @Column(name = "idReserviste", nullable = true) // Facultatif
+    private Long idReserviste;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "idExamen", nullable = false, foreignKey = @ForeignKey(name = "fk4"))
-    private Examen examen;
-
-    public Locaux getLocaux() {
-        return locaux;
-    }
-
-    public Date getDate() {
-		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
-	}
-
-	public Time getHeureDebut() {
-		return heureDebut;
-	}
-
-	public void setHeureDebut(Time heureDebut) {
-		this.heureDebut = heureDebut;
-	}
-
-	public Time getHeureFin() {
-		return heureFin;
-	}
-
-	public void setHeureFin(Time heureFin) {
-		this.heureFin = heureFin;
-	}
-
-	public void setLocaux(Locaux locaux) {
-        this.locaux = locaux;
-    }
-
-    public Enseignant getSurveillant() {
-        return surveillant;
-    }
-
-    public void setSurveillant(Enseignant surveillant) {
-        this.surveillant = surveillant;
-    }
-
-    public Enseignant getReserviste() {
-        return reserviste;
-    }
-
-    public void setReserviste(Enseignant reserviste) {
-        this.reserviste = reserviste;
-    }
-
-    public Examen getExamen() {
-        return examen;
-    }
-
-    public void setExamen(Examen examen) {
-        this.examen = examen;
-    }
+    @Column(name = "idExamen", nullable = false)
+    private Long idExamen;
 
     @Override
     public boolean equals(Object o) {
@@ -113,23 +46,14 @@ public class Surveillance{
         return Objects.equals(date, that.date) &&
                 Objects.equals(heureDebut, that.heureDebut) &&
                 Objects.equals(heureFin, that.heureFin) &&
-                Objects.equals(locaux, that.locaux) &&
-                Objects.equals(surveillant, that.surveillant) &&
-                Objects.equals(reserviste, that.reserviste) &&
-                Objects.equals(examen, that.examen);
+                Objects.equals(idLocaux, that.idLocaux) &&
+                Objects.equals(idSurveillant, that.idSurveillant) &&
+                Objects.equals(idReserviste, that.idReserviste) &&
+                Objects.equals(idExamen, that.idExamen);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(date, heureDebut, heureFin, locaux, surveillant, reserviste, examen);
-    }
-    
-    public boolean isValid() {
-        return date != null && 
-               heureDebut != null && 
-               heureFin != null && 
-               locaux != null && 
-               (surveillant != null || reserviste != null) && 
-               examen != null;
+        return Objects.hash(date, heureDebut, heureFin, idLocaux, idSurveillant, idReserviste, idExamen);
     }
 }

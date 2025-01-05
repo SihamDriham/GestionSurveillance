@@ -241,6 +241,12 @@ const SessionTable = () => {
                 config
             );
 
+            await axios.post(
+                'http://localhost:3600/surveillance/api/surveillance/planifier',
+                { idSession: sessionToValide }, 
+                config
+            );            
+
             fetchSession();
             setShowValidermModal(false);
             setSessionToValide(null);

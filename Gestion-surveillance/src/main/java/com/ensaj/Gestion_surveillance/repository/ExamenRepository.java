@@ -38,9 +38,8 @@ public interface ExamenRepository extends JpaRepository<Examen, Long> {
                                                               @Param("date") Date date,
                                                               @Param("heureDebut") Time heureDebut,
                                                               @Param("heureFin") Time heureFin);
-
-    @Query("SELECT count(e) FROM Examen e WHERE e.session.idSession = :idSession")
-    long countBySessionId(@Param("idSession") Long idSession);
-
+    
+    @Query("SELECT e FROM Examen e WHERE e.session.id = :sessionId")
+    List<Examen> findBySessionId(Long sessionId);
 
 }

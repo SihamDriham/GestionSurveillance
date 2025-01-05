@@ -34,8 +34,15 @@ public class Option {
 
     @Column(name = "nomOption")
     private String nomOption;
+
+    /*@OneToMany(mappedBy = "option", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Examen> examens;
+
+    @ManyToOne
+    @JoinColumn(name = "idDept", nullable = false)
+    private Departement departement;
     
     @OneToMany(mappedBy = "option", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Module> modules;
+    private List<Module> modules;*/
 
 }

@@ -1,174 +1,264 @@
-/*package com.ensaj.Gestion_surveillance.service;
+package com.ensaj.Gestion_surveillance.service;
 
+import com.ensaj.Gestion_surveillance.dto.SurveillanceDTO;
 import com.ensaj.Gestion_surveillance.model.*;
+import com.ensaj.Gestion_surveillance.repository.EnseignantRepository;
+import com.ensaj.Gestion_surveillance.repository.ExamenRepository;
+import com.ensaj.Gestion_surveillance.repository.LocauxRepository;
 import com.ensaj.Gestion_surveillance.repository.SurveillanceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class SurveillanceServiceImp {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SurveillanceServiceImp.class);
+
     @Autowired
     private SurveillanceRepository surveillanceRepository;
 
     @Autowired
-    private EnseignantService enseignantService;
-
+    private EnseignantRepository enseignantRepository;
     @Autowired
-    private LocauxService locauxService;
+    private EnseignantService enseignantService;
+    @Autowired
+    private LocauxRepository locauxRepository;
+    @Autowired
+    private ExamenRepository examenRepository ;
 
     @Autowired
     private SessionService sessionService;
-    
-    public void planifierSurveillanceParDepartement(Long idSession) {
-    	Optional<Session> sessionOpt = sessionService.getSessionById(idSession);
-    	if (!sessionOpt.isPresent()) {
-    	    throw new RuntimeException("Session not found.");
-    	}
-    	Session session = sessionOpt.get();
-    	
-    	if(session == null) System.out.println("Session is null");
-    	else System.out.println("Session not null");
-    	
-    	List<Examen> examens = session.getExamens();
-    	
-    	if(examens == null) System.out.println("examens is null");
-    	else System.out.println("examens not null");
-    			
-        // Récupérer la liste de tous les enseignants, y compris leurs départements
-        List<Enseignant> enseignants = enseignantService.getAllEnseignant();
-        if (enseignants.isEmpty()) throw new RuntimeException("Aucun enseignant disponible.");
-        
-        if(enseignants == null) System.out.println("enseignants is null");
-        else System.out.println("enseignant not null");
 
-        // Initialiser les compteurs pour les enseignants (séances surveillées et réservistes)
-        Map<Enseignant, Integer> surveillanceCount = new HashMap<>();
-        Map<Enseignant, Integer> reservisteCount = new HashMap<>();
-        enseignants.forEach(e -> {
-            surveillanceCount.put(e, 0);
-            reservisteCount.put(e, 0);
-        });
+    private static final int NOMBRE_RESERVISTES = 10;
 
-        // Regrouper les enseignants par département
-        Map<Departement, List<Enseignant>> enseignantsParDepartement = enseignants.stream()
-                .collect(Collectors.groupingBy(Enseignant::getDepartement));
 
-        // Liste pour stocker les surveillances planifiées
-        List<Surveillance> surveillancesPlanifiees = new ArrayList<>();
+    public List<SurveillanceDTO> getAllSurveillancesWithDetails() {
+        List<Surveillance> surveillances = surveillanceRepository.findAll();
+        List<SurveillanceDTO> surveillanceDTOs = new ArrayList<>();
 
-        // Boucler sur les examens pour attribuer surveillants et réservistes pour chaque local
-        for (Examen examen : examens) {
-            // Boucle sur chaque local de l'examen
-            for (Locaux locaux : examen.getLocaux()) {
-            	if(locaux == null) System.out.println("locaux is null");
-                else System.out.println("locaux not null");
-                int nombreEtudiants = locaux.getTaille();  // Taille du local (nombre d'étudiants dans le local)
+        for (Surveillance surveillance : surveillances) {
+            SurveillanceDTO dto = mapToDTO(surveillance);
+            surveillanceDTOs.add(dto);
+        }
 
-                // Déterminer le nombre de surveillants nécessaires pour ce local
-                int surveillantsNecessaires = calculerSurveillantsNecessaires(nombreEtudiants);
+        return surveillanceDTOs;
+    }
 
-                // Boucle sur chaque département pour assigner les surveillants
-                for (Departement departement : enseignantsParDepartement.keySet()) {
-                	if(departement == null) System.out.println("departement is null");
-                    else System.out.println("departement not null");
-                    List<Enseignant> enseignantsDepartement = enseignantsParDepartement.get(departement);
+    private SurveillanceDTO mapToDTO(Surveillance surveillance) {
+        SurveillanceDTO dto = new SurveillanceDTO();
+        dto.setDate(surveillance.getDate());
+        dto.setHeureDebut(surveillance.getHeureDebut());
+        dto.setHeureFin(surveillance.getHeureFin());
 
-                    // Sélectionner les surveillants pour ce local par département
-                    List<Enseignant> surveillants = selectionnerSurveillantsParDepartement(enseignantsDepartement, surveillanceCount, surveillantsNecessaires);
+        // Récupération des noms via les repositories
+        dto.setLocauxNom(
+                locauxRepository.findById(surveillance.getIdLocaux())
+                        .map(locaux -> locaux.getNomLocaux())
+                        .orElse("Locaux non trouvé")
+        );
 
-                    // Sélectionner les réservistes pour ce local par département
-                    List<Enseignant> reservistes = selectionnerReservistesParDepartement(enseignantsDepartement, reservisteCount);
+        dto.setSurveillantNom( enseignantRepository.findById(surveillance.getIdSurveillant())
+                .map(surveillant -> surveillant.getNom())
+                .orElse("Surveillant non trouvé")
+        );
 
-                    // Ajouter les surveillances pour chaque surveillant
+        dto.setReservisteNom(
+                surveillance.getIdReserviste() != null
+                        ? enseignantRepository.findById(surveillance.getIdReserviste())
+                        .map(reserviste -> reserviste.getNom())
+                        .orElse("Reserviste non trouvé")
+                        : "Aucun réserviste"
+        );
+        dto.setReservistePrenom(
+                surveillance.getIdReserviste() != null
+                        ? enseignantRepository.findById(surveillance.getIdReserviste())
+                        .map(reserviste -> reserviste.getPrenom())
+                        .orElse("Reserviste non trouvé")
+                        : "Aucun réserviste"
+        );
+        dto.setSurveillantPrenom(enseignantRepository.findById(surveillance.getIdSurveillant())
+                .map(surveillant -> surveillant.getPrenom())
+                .orElse("Surveillant non trouvé"));
+
+        dto.setExamenNom(
+                examenRepository.findById(surveillance.getIdExamen())
+                        .map(examen -> examen.getModule().getNomModule())
+                        .orElse("Examen non trouvé")
+        );
+
+        return dto;
+    }
+
+
+//    @Autowired
+//    public SurveillanceServiceImp(
+//            SurveillanceRepository surveillanceRepository,
+//            EnseignantService enseignantService,
+//            LocauxService locauxService,
+//            SessionService sessionService) {
+//        this.surveillanceRepository = surveillanceRepository;
+//        this.enseignantService = enseignantService;
+//        this.locauxService = locauxService;
+//        this.sessionService = sessionService;
+//    }
+
+    public boolean planifierSurveillanceParDepartement(Long idSession) {
+        try {
+            LOGGER.info("Début de la planification de la surveillance pour la session ID: {}", idSession);
+            Session session = sessionService.getSessionById(idSession)
+                    .orElseThrow(() -> new RuntimeException("Session introuvable"));
+
+            List<Examen> examens = session.getExamens();
+            List<Enseignant> enseignants = enseignantService.getAllEnseignant();
+            if (enseignants.isEmpty()) {
+                throw new RuntimeException("Aucun enseignant disponible.");
+            }
+
+            Map<Long, Map<LocalDate, Set<DemiJournee>>> surveillanceParJour = new HashMap<>();
+            Map<Long, Integer> surveillanceCount = new HashMap<>();
+            Map<Long, Integer> reservisteCount = new HashMap<>();
+
+            enseignants.forEach(e -> {
+                surveillanceParJour.put(e.getId(), new HashMap<>());
+                surveillanceCount.put(e.getId(), 0);
+                reservisteCount.put(e.getId(), 0);
+            });
+
+            List<Surveillance> surveillancesPlanifiees = new ArrayList<>();
+
+            examens.sort(Comparator.comparing(Examen::getDate).thenComparing(Examen::getHeureDebut));
+
+            for (Examen examen : examens) {
+                Date examDate = examen.getDate();
+                LocalDate dateExamen = LocalDate.from(examDate.toInstant().atZone(TimeZone.getDefault().toZoneId()));
+                LocalTime heureDebut = examen.getHeureDebut().toLocalTime();
+                DemiJournee demiJournee = determinerDemiJournee(heureDebut);
+
+                List<Enseignant> reservistes = selectionnerReservistes(enseignants);
+                LOGGER.info("Réservistes sélectionnés pour l'examen ID {}: {}", examen.getIdExamen(), reservistes);
+
+                for (Locaux locaux : examen.getLocaux()) {
+                    int surveillantsNecessaires = calculerSurveillantsNecessaires(locaux.getTaille());
+                    LOGGER.info("Surveillants nécessaires pour le local ID {}: {}", locaux.getIdLocaux(), surveillantsNecessaires);
+
+                    List<Enseignant> surveillants = selectionnerSurveillants(
+                            enseignants,
+                            surveillanceCount,
+                            surveillanceParJour,
+                            dateExamen,
+                            demiJournee,
+                            surveillantsNecessaires,
+                            reservistes
+                    );
+
+                    if (surveillants.size() < surveillantsNecessaires) {
+                        throw new RuntimeException("Nombre insuffisant de surveillants disponibles pour l'examen " +
+                                examen.getIdExamen() + " et le local " + locaux.getIdLocaux());
+                    }
+
                     for (Enseignant surveillant : surveillants) {
                         Surveillance surveillance = new Surveillance();
-                        if (surveillant != null && examen != null && locaux != null) {
-	                        surveillance.setDate(examen.getDate());
-	                        surveillance.setHeureDebut(examen.getHeureDebut());
-	                        surveillance.setHeureFin(examen.getHeureFin());
-	                        surveillance.setLocaux(locaux);  // Associer le local
-	                        surveillance.setSurveillant(surveillant);
-	                        surveillance.setExamen(examen);
-	                        surveillancesPlanifiees.add(surveillance);
-	                        surveillanceCount.put(surveillant, surveillanceCount.get(surveillant) + 1);
-                        } else {
-                            // Loggez une erreur si nécessaire ou lancez une exception
-                        	System.out.println("Une entité requise est null lors de la planification de la surveillance.");
-                        }
-                    }
-                    
-                    System.out.println("date : " + examen.getDate());
-                    System.out.println("heureDebut : " + examen.getHeureDebut());
-                    System.out.println("heureFin : " + examen.getHeureFin());
-                    
+                        surveillance.setDate(examen.getDate());
+                        surveillance.setHeureDebut(examen.getHeureDebut());
+                        surveillance.setHeureFin(examen.getHeureFin());
+                        surveillance.setIdLocaux(locaux.getIdLocaux());
+                        surveillance.setIdSurveillant(surveillant.getId());
+                        surveillance.setIdExamen(examen.getIdExamen());
 
-                    // Ajouter les surveillances pour chaque réserviste
-                    for (Enseignant reserviste : reservistes) {
-                    	if (reserviste != null && examen != null && locaux != null) {
-	                        Surveillance surveillance = new Surveillance();
-	                        surveillance.setDate(examen.getDate());
-	                        surveillance.setHeureDebut(examen.getHeureDebut());
-	                        surveillance.setHeureFin(examen.getHeureFin());
-	                        surveillance.setLocaux(locaux);  // Associer le local
-	                        surveillance.setReserviste(reserviste);
-	                        surveillance.setExamen(examen);
-	                        surveillancesPlanifiees.add(surveillance);
-	                        reservisteCount.put(reserviste, reservisteCount.get(reserviste) + 1);  // Incrementer le compteur de réserviste
-                    	} else {
-                            // Loggez une erreur si nécessaire ou lancez une exception
-                    		System.out.println("Une entité requise est null lors de la planification de la reserviste.");
-                        }
+                        surveillancesPlanifiees.add(surveillance);
+                        surveillanceCount.put(surveillant.getId(), surveillanceCount.get(surveillant.getId()) + 1);
+                        surveillanceParJour.get(surveillant.getId())
+                                .computeIfAbsent(dateExamen, k -> new HashSet<>())
+                                .add(demiJournee);
+                        LOGGER.info("Surveillance planifiée: {}", surveillance);
                     }
                 }
             }
+
+            verifierEquiteDesServeillances(surveillanceCount);
+            LOGGER.info("Vérification de l'équité des surveillances réussie.");
+
+            //System.out.println(surveillancesPlanifiees.get(0));
+            surveillanceRepository.saveAll(surveillancesPlanifiees);
+            LOGGER.info("Surveillances enregistrées avec succès. Nombre total de surveillances planifiées: {}", surveillancesPlanifiees.size());
+            return true;
+
+        } catch (Exception e) {
+            LOGGER.error("Erreur lors de la planification de la surveillance: {}", e.getMessage(), e);
+            return false;
         }
-
-        // Sauvegarder les surveillances planifiées dans la base de données
-        surveillanceRepository.saveAll(surveillancesPlanifiees);
     }
-    
-    
-    
 
-    private List<Enseignant> selectionnerSurveillantsParDepartement(List<Enseignant> enseignantsDepartement, Map<Enseignant, Integer> surveillanceCount, int nombre) {
-        // Filtrer les enseignants qui ont moins de 2 séances surveillées
-        return enseignantsDepartement.stream()
-                .filter(e -> surveillanceCount.get(e) < 2) // Maximum de 2 demi-journées par jour
-                .sorted(Comparator.comparingInt(surveillanceCount::get)) // Trier par nombre de séances attribuées
-                .limit(nombre) // Limiter au nombre nécessaire
+    private List<Enseignant> selectionnerReservistes(List<Enseignant> enseignants) {
+        return enseignants.stream()
+                .limit(NOMBRE_RESERVISTES)
                 .collect(Collectors.toList());
     }
 
-    private List<Enseignant> selectionnerReservistesParDepartement(List<Enseignant> enseignantsDepartement, Map<Enseignant, Integer> reservisteCount) {
-        // Trier les enseignants par le nombre de fois qu'ils ont été réservistes
-        return enseignantsDepartement.stream()
-                .filter(e -> reservisteCount.get(e) < 1) // Limiter à 1 fois par réserviste
-                .sorted(Comparator.comparingInt(reservisteCount::get)) // Prioriser ceux qui ont été réservistes le moins souvent
-                .limit(10) // Réserver 10 enseignants maximum par demi-journée
+    private List<Enseignant> selectionnerSurveillants(
+            List<Enseignant> enseignants,
+            Map<Long, Integer> surveillanceCount,
+            Map<Long, Map<LocalDate, Set<DemiJournee>>> surveillanceParJour,
+            LocalDate date,
+            DemiJournee demiJournee,
+            int nombre,
+            List<Enseignant> reservistes) {
+
+        return enseignants.stream()
+                .filter(e -> !reservistes.contains(e))
+                .filter(e -> !estDejaOccupe(e.getId(), date, demiJournee, surveillanceParJour))
+                .sorted(Comparator.comparingInt(e -> surveillanceCount.getOrDefault(e.getId(), 0)))
+                .limit(nombre)
                 .collect(Collectors.toList());
     }
 
-        
-        // Method to calculate the number of supervisors needed based on the local size (number of students)
-        public int calculerSurveillantsNecessaires(int nombreEtudiants) {
-            if (nombreEtudiants >= 80 && nombreEtudiants <= 100) {
-                return 4;  // 4 supervisors for a local with 80-100 students
-            } else if (nombreEtudiants >= 65 && nombreEtudiants < 80) {
-                return 3;  // 3 supervisors for a local with 65-79 students
-            } else if (nombreEtudiants < 50) {
-                return 2;  // 2 supervisors for a local with less than 50 students
-            }
-            // If the number of students doesn't fall into any of the above categories, return 0 or a default value
-            return 0;  // Default case, you can adjust this as needed
-        }
-    
+    private boolean estDejaOccupe(
+            Long enseignantId,
+            LocalDate date,
+            DemiJournee demiJournee,
+            Map<Long, Map<LocalDate, Set<DemiJournee>>> surveillanceParJour) {
 
-    
+        return surveillanceParJour.get(enseignantId)
+                .getOrDefault(date, new HashSet<>())
+                .contains(demiJournee);
+    }
+
+    private DemiJournee determinerDemiJournee(LocalTime heure) {
+        return heure.isBefore(LocalTime.of(12, 0)) ? DemiJournee.MATIN : DemiJournee.APRES_MIDI;
+    }
+
+    private void verifierEquiteDesServeillances(Map<Long, Integer> surveillanceCount) {
+        int min = surveillanceCount.values().stream().mapToInt(Integer::intValue).min().orElse(0);
+        int max = surveillanceCount.values().stream().mapToInt(Integer::intValue).max().orElse(0);
+
+        if (max - min > 1) {
+            throw new RuntimeException("La répartition des surveillances n'est pas équitable. " +
+                    "Différence max entre enseignants: " + (max - min));
+        }
+    }
+
+    public int calculerSurveillantsNecessaires(int nombreEtudiants) {
+        if (nombreEtudiants >= 80 && nombreEtudiants <= 100) {
+            return 4;
+        } else if (nombreEtudiants >= 65 && nombreEtudiants < 80) {
+            return 3;
+        } else if (nombreEtudiants < 50) {
+            return 2;
+        }
+        return 0;
+    }
+
+    private enum DemiJournee {
+        MATIN,
+        APRES_MIDI
+    }
 }
-*/
-

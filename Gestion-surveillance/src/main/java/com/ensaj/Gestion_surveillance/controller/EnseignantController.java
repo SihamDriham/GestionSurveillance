@@ -31,9 +31,9 @@ public class EnseignantController {
     public ResponseEntity<Enseignant> addEnseignant(@RequestBody Enseignant enseignant) {
         try {
             Enseignant newEnseignant = enseignantService.saveEnseignant(enseignant);
-            return ResponseEntity.status(201).body(newEnseignant);
+            return ResponseEntity.status(201).body(newEnseignant); // Retourne l'enseignant ajouté
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(null); 
+            return ResponseEntity.status(400).body(null); // En cas d'erreur, retourne une erreur 400
         }
     }
 
@@ -53,10 +53,10 @@ public class EnseignantController {
                 Enseignant updatedEnseignant = enseignantService.saveEnseignant(enseignant);
                 return ResponseEntity.ok(updatedEnseignant);
             } else {
-                return ResponseEntity.status(404).build(); 
+                return ResponseEntity.status(404).build(); // Si l'enseignant n'existe pas
             }
         } catch (Exception e) {
-            return ResponseEntity.status(400).build(); 
+            return ResponseEntity.status(400).build(); // En cas d'erreur
         }
     }
 
@@ -67,12 +67,12 @@ public class EnseignantController {
             Optional<Enseignant> enseignant = enseignantService.findEnseignantById(id);
             if (enseignant.isPresent()) {
                 enseignantService.deleteEnseignant(id);
-                return ResponseEntity.ok().build(); 
+                return ResponseEntity.ok().build(); // Retourne un statut 200 si l'enseignant est supprimé
             } else {
-                return ResponseEntity.status(404).build(); 
+                return ResponseEntity.status(404).build(); // Retourne 404 si l'enseignant n'est pas trouvé
             }
         } catch (Exception e) {
-            return ResponseEntity.status(400).build(); 
+            return ResponseEntity.status(400).build(); // En cas d'erreur, retourne une erreur 400
         }
     }
 

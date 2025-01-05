@@ -18,11 +18,6 @@ const JWTLogin = ({ className, ...rest }) => {
         // Stocker le token dans le localStorage
         localStorage.setItem('token', response.data.token);
 
-        /*const token = response.data.token;
-        const tokenParts = token.split('.');
-        const payload = JSON.parse(atob(tokenParts[1]));
-        const userType = payload.type;*/
-
         
               window.location.href = `/${import.meta.env.VITE_APP_BASE_NAME}/Sessions`;
       

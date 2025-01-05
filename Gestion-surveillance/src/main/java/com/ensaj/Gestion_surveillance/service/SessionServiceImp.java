@@ -22,6 +22,10 @@ public class SessionServiceImp implements SessionService{
     private TypeSessionRepository typeSessionRepository;
 
     @Override
+   /* public List<Session> getAllSessions() {
+        return sessionRepository.findAll();
+    }*/
+
     public List<Map<String, Object>> getAllSessionssWithDetails() {
         List<Object[]> results = sessionRepository.findAllSessionsByType();
         List<Map<String, Object>> sessions = new ArrayList<>();
@@ -56,8 +60,10 @@ public class SessionServiceImp implements SessionService{
 
     @Override
     public void ajouterSession(Map<String, Object> requestBody, Long idTypeSession) {
+        // Créer un objet Session
         Session session = new Session();
 
+        // Format de la date pour les champs date_debut et date_fin
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date dateDebut = null;
         Date dateFin = null;
@@ -71,6 +77,7 @@ public class SessionServiceImp implements SessionService{
         session.setDateDebut(dateDebut);
         session.setDateFin(dateFin);
 
+        // Format de l'heure pour les champs heureDebut et heureFin
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
         try {
@@ -98,10 +105,12 @@ public class SessionServiceImp implements SessionService{
             throw new IllegalArgumentException("Format d'heure invalide, veuillez utiliser le format HH:mm:ss.");
         }
 
+        // Récupérer le TypeSession
         TypeSession typeSession = typeSessionRepository.findById(idTypeSession)
                 .orElseThrow(() -> new RuntimeException("Type avec id " + idTypeSession + " non trouvé"));
         session.setTypeSession(typeSession);
 
+        // Sauvegarder la session dans la base de données
         sessionRepository.save(session);
     }
 

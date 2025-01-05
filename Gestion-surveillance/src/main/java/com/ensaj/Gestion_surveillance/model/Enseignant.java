@@ -16,14 +16,6 @@ public class Enseignant {
     private String nom;
     private String prenom;
     private String email;
-    
-    private Boolean disponse;
-    
-    @ManyToOne
-    @JoinColumn(name = "departement_id", nullable = false)
-    @JsonBackReference
-    private Departement departement;
-    
     public Long getId() {
 		return id;
 	}
@@ -83,5 +75,16 @@ public class Enseignant {
 		this.departement = departement;
 	}
 
+
+	private Boolean disponse;
+
+
+    @ManyToOne
+    @JoinColumn(name = "departement_id", nullable = false)
+    @JsonBackReference
+    private Departement departement;
+
+    /*@OneToMany(mappedBy = "enseignant", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Examen> examens;*/
 
 }

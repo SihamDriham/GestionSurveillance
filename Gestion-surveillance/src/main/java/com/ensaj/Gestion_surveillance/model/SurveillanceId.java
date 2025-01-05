@@ -18,6 +18,8 @@ public class SurveillanceId implements Serializable {
     private Enseignant reserviste;
     private Examen examen;
 
+    //Default constructor, getters, setters, equals, and hashCode methods
+
     public SurveillanceId() {}
 
     public SurveillanceId(Date date, Time heureDebut, Time heureFin, Locaux locaux, Enseignant surveillant, Enseignant reserviste, Examen examen) {
@@ -104,5 +106,4 @@ public class SurveillanceId implements Serializable {
     public int hashCode() {
         return Objects.hash(date, heureDebut, heureFin, locaux, surveillant, reserviste, examen);
     }
-    
 }

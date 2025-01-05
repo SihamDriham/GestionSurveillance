@@ -67,13 +67,6 @@ public class ExamenRestController {
             return new ArrayList<>();
         }
     }
-    
-    @GetMapping("/countExams/{idSession}")
-    @PreAuthorize("isAuthenticated()")	
-    public ResponseEntity<Long> countExamsBySessionId(@PathVariable Long idSession) {
-        long count = examenService.countExamsBySessionId(idSession);
-        return ResponseEntity.ok(count);
-    }
 
 
 }

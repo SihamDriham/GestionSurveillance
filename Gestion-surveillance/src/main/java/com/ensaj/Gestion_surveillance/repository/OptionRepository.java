@@ -11,6 +11,18 @@ import java.util.List;
 @Repository
 public interface OptionRepository extends JpaRepository<Option, Long> {
 
+   /* @Query("SELECT d.nomDept, o.nomOption, o.idOption " +
+            "FROM Option o " +
+            "JOIN o.departement d")
+    List<Object[]> findAllOptionByDept();
+
+    @Query("SELECT o FROM Option o WHERE " +
+            "LOWER(CAST(o.idOption AS string)) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(CAST(o.nomOption AS string)) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(o.departement.nomDept) LIKE LOWER(CONCAT('%', :search, '%'))")
+
+    List<Option> searchOption(@Param("search") String search);*/
+
     @Query("SELECT o FROM Option o WHERE " +
             "LOWER(CAST(o.idOption AS string)) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
             "LOWER(CAST(o.nomOption AS string)) LIKE LOWER(CONCAT('%', :search, '%'))")
