@@ -114,9 +114,3 @@ https://github.com/user-attachments/assets/13042deb-a763-4059-9064-e77139b3a98e
 
 ---
 
-## Contributrice
-- DRIHAM Siham [Github](https://github.com/SihamDriham)
-- ZENNOURI Nassima [Github](https://github.com/NassimaZENNOURI)
-- SABROU Hafsa [Github](https://github.com/Hafsa1sa)
-- ZAHIR Oumaima [Github](https://github.com/ZahirOuma)
-
