@@ -114,3 +114,10 @@ https://github.com/user-attachments/assets/13042deb-a763-4059-9064-e77139b3a98e
 
 ---
 
+## Auteur
+
+**DRIHAM Siham**
+Ingénieure d'État en Big Data 
+🔗 [LinkedIn](https://www.linkedin.com/in/siham-driham-955838238/) · 📧 [sihamdriham@gmail.com]
+
+---
